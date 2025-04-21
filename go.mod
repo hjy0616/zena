@@ -60,7 +60,7 @@ require (
 	github.com/kilic/bls12-381 v0.1.0
 	github.com/kylelemons/godebug v1.1.0
 	github.com/maticnetwork/crand v1.0.2
-	github.com/maticnetwork/heimdall v1.0.7
+	github.com/zenanetwork/iris v0.1.0
 	github.com/maticnetwork/polyproto v0.0.4
 	github.com/mattn/go-colorable v0.1.13
 	github.com/mattn/go-isatty v0.0.20
@@ -293,8 +293,6 @@ replace github.com/cosmos/cosmos-sdk => github.com/maticnetwork/cosmos-sdk v0.38
 replace github.com/tendermint/tendermint => github.com/maticnetwork/tendermint v0.33.0
 
 replace github.com/tendermint/tm-db => github.com/tendermint/tm-db v0.2.0
-
-replace github.com/zenanetwork/go-zenanet => github.com/maticnetwork/bor v1.5.5
 
 replace github.com/Masterminds/goutils => github.com/Masterminds/goutils v1.1.1
 

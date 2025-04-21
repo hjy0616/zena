@@ -1,4 +1,4 @@
-package eireneapp
+package irisapp
 
 import (
 	"context"
@@ -9,8 +9,8 @@ import (
 
 	"github.com/zenanetwork/go-zenanet/log"
 
-	chTypes "github.com/maticnetwork/heimdall/checkpoint/types"
-	hmTypes "github.com/maticnetwork/heimdall/types"
+	chTypes "github.com/zenanetwork/iris/checkpoint/types"
+	hmTypes "github.com/zenanetwork/iris/types"
 )
 
 func (h *IrisAppClient) FetchMilestoneCount(_ context.Context) (int64, error) {

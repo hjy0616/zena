@@ -8,9 +8,9 @@ import (
 	"strings"
 	"syscall"
 
-	"github.com/maticnetwork/heimdall/cmd/heimdalld/service"
 	"github.com/mitchellh/cli"
 	"github.com/pelletier/go-toml"
+	"github.com/zenanetwork/iris/cmd/irisd/service"
 
 	"github.com/zenanetwork/go-zenanet/log"
 )

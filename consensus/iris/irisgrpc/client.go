@@ -1,4 +1,4 @@
-package eirenegrpc
+package irisgrpc
 
 import (
 	"time"

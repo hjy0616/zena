@@ -32,6 +32,7 @@ import (
 	"github.com/zenanetwork/go-zenanet/common"
 	"github.com/zenanetwork/go-zenanet/common/tracing"
 	"github.com/zenanetwork/go-zenanet/consensus"
+	"github.com/zenanetwork/go-zenanet/consensus/iris"
 	"github.com/zenanetwork/go-zenanet/consensus/misc/eip1559"
 	"github.com/zenanetwork/go-zenanet/consensus/misc/eip4844"
 	"github.com/zenanetwork/go-zenanet/core"
@@ -1263,7 +1264,7 @@ func (w *worker) prepareWork(genParams *generateParams) (*environment, error) {
 	// Run the consensus preparation with the default or customized consensus engine.
 	if err := w.engine.Prepare(w.chain, header); err != nil {
 		switch err.(type) {
-		case *zena.UnauthorizedSignerError:
+		case *iris.UnauthorizedSignerError:
 			log.Debug("Failed to prepare header for sealing", "err", err)
 		default:
 			log.Error("Failed to prepare header for sealing", "err", err)

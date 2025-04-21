@@ -1,9 +1,9 @@
-package eireneapp
+package irisapp
 
 import (
 	"context"
 
-	hmTypes "github.com/maticnetwork/heimdall/types"
+	hmTypes "github.com/zenanetwork/iris/types"
 
 	"github.com/zenanetwork/go-zenanet/consensus/iris/irisd/span"
 	"github.com/zenanetwork/go-zenanet/consensus/iris/valset"

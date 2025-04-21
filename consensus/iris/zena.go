@@ -208,7 +208,7 @@ func ZenaRLP(header *types.Header, c *params.ZenaConfig) []byte {
 	return b.Bytes()
 }
 
-// Zena is the zena-eirene consensus engine
+// Zena is the zena-iris consensus engine
 type Zena struct {
 	chainConfig *params.ChainConfig // Chain config
 	config      *params.ZenaConfig  // Consensus engine configuration parameters for zena consensus
@@ -222,7 +222,7 @@ type Zena struct {
 	ethAPI                 api.Caller
 	spanner                Spanner
 	GenesisContractsClient GenesisContract
-	IrisClient         IIrisClient
+	IrisClient             IIrisClient
 
 	// The fields below are for testing only
 	fakeDiff      bool // Skip difficulty verifications
@@ -266,7 +266,7 @@ func New(
 		signatures:             signatures,
 		spanner:                spanner,
 		GenesisContractsClient: genesisContracts,
-		IrisClient:         irisClient,
+		IrisClient:             irisClient,
 		devFakeAuthor:          devFakeAuthor,
 	}
 

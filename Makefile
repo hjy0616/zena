@@ -34,7 +34,7 @@ protoc:
 	protoc --go_out=. --go-grpc_out=. ./internal/cli/server/proto/*.proto
 
 generate-mocks:
-	go generate mockgen -destination=./tests/zena/mocks/IHeimdallClient.go -package=mocks ./consensus/zena IHeimdallClient
+	go generate mockgen -destination=./tests/zena/mocks/IIrisClient.go -package=mocks ./consensus/zena IIrisClient
 	go generate mockgen -destination=./eth/filters/IBackend.go -package=filters ./eth/filters Backend
 	go generate mockgen -destination=./eth/filters/IDatabase.go -package=filters ./ethdb Database
 

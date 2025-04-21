@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/zenanetwork/go-zenanet/consensus/eirene/clerk"
+	"github.com/zenanetwork/go-zenanet/consensus/iris/clerk"
 )
 
 type MaxCheckpointLengthExceededError struct {

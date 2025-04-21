@@ -1,4 +1,4 @@
-package eireneapp
+package irisapp
 
 import (
 	"context"
@@ -7,7 +7,7 @@ import (
 	"github.com/zenanetwork/go-zenanet/consensus/iris/irisd/checkpoint"
 	"github.com/zenanetwork/go-zenanet/log"
 
-	hmTypes "github.com/maticnetwork/heimdall/types"
+	hmTypes "github.com/zenanetwork/iris/types"
 )
 
 func (h *IrisAppClient) FetchCheckpointCount(_ context.Context) (int64, error) {

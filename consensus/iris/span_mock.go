@@ -9,8 +9,8 @@ import (
 	reflect "reflect"
 
 	common "github.com/zenanetwork/go-zenanet/common"
-	span "github.com/zenanetwork/go-zenanet/consensus/eirene/eirened/span"
-	valset "github.com/zenanetwork/go-zenanet/consensus/eirene/valset"
+	span "github.com/zenanetwork/go-zenanet/consensus/iris/irisd/span"
+	valset "github.com/zenanetwork/go-zenanet/consensus/iris/valset"
 	core "github.com/zenanetwork/go-zenanet/core"
 	state "github.com/zenanetwork/go-zenanet/core/state"
 	types "github.com/zenanetwork/go-zenanet/core/types"

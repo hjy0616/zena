@@ -1,12 +1,12 @@
-package eireneapp
+package irisapp
 
 import (
 	"github.com/cosmos/cosmos-sdk/types"
 
 	"github.com/zenanetwork/go-zenanet/log"
 
-	"github.com/maticnetwork/heimdall/app"
-	"github.com/maticnetwork/heimdall/cmd/heimdalld/service"
+	"github.com/zenanetwork/iris/app"
+	"github.com/zenanetwork/iris/cmd/irisd/service"
 
 	abci "github.com/tendermint/tendermint/abci/types"
 )

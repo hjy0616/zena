@@ -4,7 +4,7 @@ import (
 	"context"
 	"encoding/json"
 
-	"github.com/zenanetwork/go-zenanet/consensus/eirene/valset"
+	"github.com/zenanetwork/go-zenanet/consensus/iris/valset"
 	"github.com/zenanetwork/go-zenanet/log"
 
 	lru "github.com/hashicorp/golang-lru"

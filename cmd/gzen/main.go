@@ -47,13 +47,13 @@ import (
 	_ "github.com/zenanetwork/go-zenanet/eth/tracers/live"
 	_ "github.com/zenanetwork/go-zenanet/eth/tracers/native"
 
-	"github.com/maticnetwork/heimdall/cmd/heimdalld/service"
 	"github.com/urfave/cli/v2"
+	"github.com/zenanetwork/iris/cmd/irisd/service"
 )
 
 const (
-	clientIdentifier     = "zena" // Client identifier to advertise over the network
-	repositoryIdentifier = "go-zenanet"
+	clientIdentifier     = "gzen" // Client identifier to advertise over the network
+	repositoryIdentifier = "gzen"
 )
 
 var (

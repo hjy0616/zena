@@ -20,7 +20,7 @@ ethURL: http://ganache:9545
 ethHostUser: ubuntu
 devnetType: docker
 zenaDockerBuildContext: "../../zena"
-irisDockerBuildContext: "https://github.com/maticnetwork/heimdall.git#develop"
+irisDockerBuildContext: "https://github.com/zenanetwork/iris.git#develop"
 sprintSizeBlockNumber:
   - "0"
 devnetZenaFlags: config,config,config

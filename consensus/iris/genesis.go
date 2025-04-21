@@ -4,8 +4,8 @@ import (
 	"math/big"
 
 	"github.com/zenanetwork/go-zenanet/common"
-	"github.com/zenanetwork/go-zenanet/consensus/eirene/clerk"
-	"github.com/zenanetwork/go-zenanet/consensus/eirene/statefull"
+	"github.com/zenanetwork/go-zenanet/consensus/iris/clerk"
+	"github.com/zenanetwork/go-zenanet/consensus/iris/statefull"
 	"github.com/zenanetwork/go-zenanet/core/state"
 	"github.com/zenanetwork/go-zenanet/core/types"
 )

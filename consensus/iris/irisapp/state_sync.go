@@ -1,10 +1,10 @@
-package eireneapp
+package irisapp
 
 import (
 	"context"
 	"time"
 
-	"github.com/maticnetwork/heimdall/clerk/types"
+	"github.com/zenanetwork/iris/clerk/types"
 
 	"github.com/zenanetwork/go-zenanet/consensus/iris/clerk"
 )

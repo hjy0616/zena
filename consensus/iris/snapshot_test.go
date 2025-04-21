@@ -11,7 +11,7 @@ import (
 
 	"github.com/zenanetwork/go-zenanet/common"
 	unique "github.com/zenanetwork/go-zenanet/common/set"
-	"github.com/zenanetwork/go-zenanet/consensus/eirene/valset"
+	"github.com/zenanetwork/go-zenanet/consensus/iris/valset"
 )
 
 const (
