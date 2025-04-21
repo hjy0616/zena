@@ -364,12 +364,12 @@ func gzen(ctx *cli.Context) error {
 		return fmt.Errorf("invalid command: %q", args[0])
 	}
 
-	if ctx.Bool(utils.RunHeimdallFlag.Name) {
+	if ctx.Bool(utils.RunIrisFlag.Name) {
 		shutdownCtx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGINT, syscall.SIGTERM)
 		defer stop()
 
 		go func() {
-			service.NewHeimdallService(shutdownCtx, getHeimdallArgs(ctx))
+			service.NewIrisService(shutdownCtx, getIrisArgs(ctx))
 		}()
 	}
 
@@ -502,7 +502,7 @@ func unlockAccounts(ctx *cli.Context, stack *node.Node) {
 	}
 }
 
-func getHeimdallArgs(ctx *cli.Context) []string {
-	heimdallArgs := strings.Split(ctx.String(utils.RunHeimdallArgsFlag.Name), ",")
-	return append([]string{"start"}, heimdallArgs...)
+func getIrisArgs(ctx *cli.Context) []string {
+	irisArgs := strings.Split(ctx.String(utils.RunIrisArgsFlag.Name), ",")
+	return append([]string{"start"}, irisArgs...)
 }

@@ -102,8 +102,8 @@ type Config struct {
 	// P2P has the p2p network related settings
 	P2P *P2PConfig `hcl:"p2p,block" toml:"p2p,block"`
 
-	// Heimdall has the heimdall connection related settings
-	Heimdall *HeimdallConfig `hcl:"heimdall,block" toml:"heimdall,block"`
+	// Iris has the iris connection related settings
+	Iris *IrisConfig `hcl:"iris,block" toml:"iris,block"`
 
 	// TxPool has the transaction pool related settings
 	TxPool *TxPoolConfig `hcl:"txpool,block" toml:"txpool,block"`
@@ -250,24 +250,24 @@ type P2PDiscovery struct {
 	DNS []string `hcl:"dns,optional" toml:"dns,optional"`
 }
 
-type HeimdallConfig struct {
-	// URL is the url of the heimdall server
+type IrisConfig struct {
+	// URL is the url of the iris server
 	URL string `hcl:"url,optional" toml:"url,optional"`
 
-	// Without is used to disable remote heimdall during testing
+	// Without is used to disable remote iris during testing
 	Without bool `hcl:"zena.without,optional" toml:"zena.without,optional"`
 
-	// GRPCAddress is the address of the heimdall grpc server
+	// GRPCAddress is the address of the iris grpc server
 	GRPCAddress string `hcl:"grpc-address,optional" toml:"grpc-address,optional"`
 
-	// RunHeimdall is used to run heimdall as a child process
-	RunHeimdall bool `hcl:"zena.runheimdall,optional" toml:"zena.runheimdall,optional"`
+	// RunIris is used to run iris as a child process
+	RunIris bool `hcl:"zena.runiris,optional" toml:"zena.runiris,optional"`
 
-	// RunHeimdal args are the arguments to run heimdall with
-	RunHeimdallArgs string `hcl:"zena.runheimdallargs,optional" toml:"zena.runheimdallargs,optional"`
+	// RunHeimdal args are the arguments to run iris with
+	RunIrisArgs string `hcl:"zena.runirisargs,optional" toml:"zena.runirisargs,optional"`
 
-	// UseHeimdallApp is used to fetch data from heimdall app when running heimdall as a child process
-	UseHeimdallApp bool `hcl:"zena.useheimdallapp,optional" toml:"zena.useheimdallapp,optional"`
+	// UseIrisApp is used to fetch data from iris app when running iris as a child process
+	UseIrisApp bool `hcl:"zena.useirisapp,optional" toml:"zena.useirisapp,optional"`
 }
 
 type TxPoolConfig struct {
@@ -642,7 +642,7 @@ func DefaultConfig() *Config {
 				DNS:          []string{},
 			},
 		},
-		Heimdall: &HeimdallConfig{
+		Iris: &IrisConfig{
 			URL:         "http://localhost:1317",
 			Without:     false,
 			GRPCAddress: "",
@@ -929,12 +929,12 @@ func (c *Config) buildEth(stack *node.Node, accountManager *accounts.Manager) (*
 		n.Genesis = c.chain.Genesis
 	}
 
-	n.HeimdallURL = c.Heimdall.URL
-	n.WithoutHeimdall = c.Heimdall.Without
-	n.HeimdallgRPCAddress = c.Heimdall.GRPCAddress
-	n.RunHeimdall = c.Heimdall.RunHeimdall
-	n.RunHeimdallArgs = c.Heimdall.RunHeimdallArgs
-	n.UseHeimdallApp = c.Heimdall.UseHeimdallApp
+	n.IrisURL = c.Iris.URL
+	n.WithoutIris = c.Iris.Without
+	n.IrisgRPCAddress = c.Iris.GRPCAddress
+	n.RunIris = c.Iris.RunIris
+	n.RunIrisArgs = c.Iris.RunIrisArgs
+	n.UseIrisApp = c.Iris.UseIrisApp
 
 	// Developer Fake Author for producing blocks without authorisation on zena consensus
 	n.DevFakeAuthor = c.DevFakeAuthor

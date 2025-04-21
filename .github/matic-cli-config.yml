@@ -1,7 +1,7 @@
 defaultStake: 10000
 defaultFee: 2000
 zenaChainId: 15001
-heimdallChainId: eirene-15001
+irisChainId: iris-15001
 contractsBranch: mardizzone/node-16
 genesisContractsBranch: master
 sprintSize:
@@ -20,7 +20,7 @@ ethURL: http://ganache:9545
 ethHostUser: ubuntu
 devnetType: docker
 zenaDockerBuildContext: "../../zena"
-eireneDockerBuildContext: "https://github.com/maticnetwork/heimdall.git#develop"
+irisDockerBuildContext: "https://github.com/maticnetwork/heimdall.git#develop"
 sprintSizeBlockNumber:
   - "0"
 devnetZenaFlags: config,config,config

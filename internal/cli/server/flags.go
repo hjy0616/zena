@@ -160,48 +160,48 @@ func (c *Command) Flags(config *Config) *flagset.Flagset {
 		Group:   "Logging",
 	})
 
-	// heimdall
+	// iris
 	f.StringFlag(&flagset.StringFlag{
-		Name:    "zena.heimdall",
-		Usage:   "URL of Heimdall service",
-		Value:   &c.cliConfig.Heimdall.URL,
-		Default: c.cliConfig.Heimdall.URL,
+		Name:    "zena.iris",
+		Usage:   "URL of Iris service",
+		Value:   &c.cliConfig.Iris.URL,
+		Default: c.cliConfig.Iris.URL,
 	})
 	f.BoolFlag(&flagset.BoolFlag{
-		Name:    "zena.withoutheimdall",
-		Usage:   "Run without Heimdall service (for testing purpose)",
-		Value:   &c.cliConfig.Heimdall.Without,
-		Default: c.cliConfig.Heimdall.Without,
+		Name:    "zena.withoutiris",
+		Usage:   "Run without Iris service (for testing purpose)",
+		Value:   &c.cliConfig.Iris.Without,
+		Default: c.cliConfig.Iris.Without,
 	})
 	f.BoolFlag(&flagset.BoolFlag{
 		Name:    "zena.devfakeauthor",
-		Usage:   "Run miner without validator set authorization [dev mode] : Use with '--zena.withoutheimdall'",
+		Usage:   "Run miner without validator set authorization [dev mode] : Use with '--zena.withoutiris'",
 		Value:   &c.cliConfig.DevFakeAuthor,
 		Default: c.cliConfig.DevFakeAuthor,
 	})
 	f.StringFlag(&flagset.StringFlag{
-		Name:    "zena.heimdallgRPC",
-		Usage:   "Address of Heimdall gRPC service",
-		Value:   &c.cliConfig.Heimdall.GRPCAddress,
-		Default: c.cliConfig.Heimdall.GRPCAddress,
+		Name:    "zena.irisgRPC",
+		Usage:   "Address of Iris gRPC service",
+		Value:   &c.cliConfig.Iris.GRPCAddress,
+		Default: c.cliConfig.Iris.GRPCAddress,
 	})
 	f.BoolFlag(&flagset.BoolFlag{
-		Name:    "zena.runheimdall",
-		Usage:   "Run Heimdall service as a child process",
-		Value:   &c.cliConfig.Heimdall.RunHeimdall,
-		Default: c.cliConfig.Heimdall.RunHeimdall,
+		Name:    "zena.runiris",
+		Usage:   "Run Iris service as a child process",
+		Value:   &c.cliConfig.Iris.RunIris,
+		Default: c.cliConfig.Iris.RunIris,
 	})
 	f.StringFlag(&flagset.StringFlag{
-		Name:    "zena.runheimdallargs",
-		Usage:   "Arguments to pass to Heimdall service",
-		Value:   &c.cliConfig.Heimdall.RunHeimdallArgs,
-		Default: c.cliConfig.Heimdall.RunHeimdallArgs,
+		Name:    "zena.runirisargs",
+		Usage:   "Arguments to pass to Iris service",
+		Value:   &c.cliConfig.Iris.RunIrisArgs,
+		Default: c.cliConfig.Iris.RunIrisArgs,
 	})
 	f.BoolFlag(&flagset.BoolFlag{
-		Name:    "zena.useheimdallapp",
-		Usage:   "Use child heimdall process to fetch data, Only works when zena.runheimdall is true",
-		Value:   &c.cliConfig.Heimdall.UseHeimdallApp,
-		Default: c.cliConfig.Heimdall.UseHeimdallApp,
+		Name:    "zena.useirisapp",
+		Usage:   "Use child iris process to fetch data, Only works when zena.runiris is true",
+		Value:   &c.cliConfig.Iris.UseIrisApp,
+		Default: c.cliConfig.Iris.UseIrisApp,
 	})
 
 	// txpool options

@@ -2312,13 +2312,13 @@ func MakeChain(ctx *cli.Context, stack *node.Node, readonly bool) (*core.BlockCh
 	}
 
 	configs := &ethconfig.Config{
-		Genesis:             gspec,
-		HeimdallURL:         ctx.String(HeimdallURLFlag.Name),
-		WithoutHeimdall:     ctx.Bool(WithoutHeimdallFlag.Name),
-		HeimdallgRPCAddress: ctx.String(HeimdallgRPCAddressFlag.Name),
-		RunHeimdall:         ctx.Bool(RunHeimdallArgsFlag.Name),
-		RunHeimdallArgs:     ctx.String(RunHeimdallArgsFlag.Name),
-		UseHeimdallApp:      ctx.Bool(UseHeimdallAppFlag.Name),
+		Genesis:         gspec,
+		IrisURL:         ctx.String(IrisURLFlag.Name),
+		WithoutIris:     ctx.Bool(WithoutIrisFlag.Name),
+		IrisgRPCAddress: ctx.String(IrisgRPCAddressFlag.Name),
+		RunIris:         ctx.Bool(RunIrisArgsFlag.Name),
+		RunIrisArgs:     ctx.String(RunIrisArgsFlag.Name),
+		UseIrisApp:      ctx.Bool(UseIrisAppFlag.Name),
 	}
 	_ = CreateZenaZenanet(configs)
 	engine, err := ethconfig.CreateConsensusEngine(config, configs, chainDb, nil)

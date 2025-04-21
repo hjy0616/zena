@@ -26,13 +26,12 @@ import (
 	"github.com/zenanetwork/go-zenanet/consensus"
 	"github.com/zenanetwork/go-zenanet/consensus/beacon"
 	"github.com/zenanetwork/go-zenanet/consensus/clique"
-	"github.com/zenanetwork/go-zenanet/consensus/eirene"
-	"github.com/zenanetwork/go-zenanet/consensus/eirene/contract"
-	"github.com/zenanetwork/go-zenanet/consensus/eirene/heimdall" //nolint:typecheck
-	"github.com/zenanetwork/go-zenanet/consensus/eirene/heimdall/span"
-	"github.com/zenanetwork/go-zenanet/consensus/eirene/heimdallapp"
-	"github.com/zenanetwork/go-zenanet/consensus/eirene/heimdallgrpc"
 	"github.com/zenanetwork/go-zenanet/consensus/ethash"
+	"github.com/zenanetwork/go-zenanet/consensus/iris"
+	"github.com/zenanetwork/go-zenanet/consensus/iris/contract" //nolint:typecheck
+	"github.com/zenanetwork/go-zenanet/consensus/iris/irisapp"
+	"github.com/zenanetwork/go-zenanet/consensus/iris/irisd/span"
+	"github.com/zenanetwork/go-zenanet/consensus/iris/irisgrpc"
 	"github.com/zenanetwork/go-zenanet/core"
 	"github.com/zenanetwork/go-zenanet/core/txpool/blobpool"
 	"github.com/zenanetwork/go-zenanet/core/txpool/legacypool"
@@ -183,23 +182,23 @@ type Config struct {
 	// OverrideCancun (TODO: remove after the fork)
 	OverrideCancun *big.Int `toml:",omitempty"`
 
-	// URL to connect to Heimdall node
-	HeimdallURL string
+	// URL to connect to Iris node
+	IrisURL string
 
-	// No heimdall service
-	WithoutHeimdall bool
+	// No iris service
+	WithoutIris bool
 
-	// Address to connect to Heimdall gRPC server
-	HeimdallgRPCAddress string
+	// Address to connect to Iris gRPC server
+	IrisgRPCAddress string
 
-	// Run heimdall service as a child process
-	RunHeimdall bool
+	// Run iris service as a child process
+	RunIris bool
 
-	// Arguments to pass to heimdall service
-	RunHeimdallArgs string
+	// Arguments to pass to iris service
+	RunIrisArgs string
 
-	// Use child heimdall process to fetch data, Only works when RunHeimdall is true
-	UseHeimdallApp bool
+	// Use child iris process to fetch data, Only works when RunIris is true
+	UseIrisApp bool
 
 	// Zena logs flag
 	ZenaLogs bool
@@ -223,29 +222,29 @@ func CreateConsensusEngine(chainConfig *params.ChainConfig, ethConfig *Config, d
 	if chainConfig.Clique != nil {
 		return beacon.New(clique.New(chainConfig.Clique, db)), nil
 	} else if chainConfig.Zena != nil && chainConfig.Zena.ValidatorContract != "" {
-		// If Zena eirene consensus is requested, set it up
-		// In order to pass the zenanet transaction tests, we need to set the burn contract which is in the eirene config
-		// Then, eirene != nil will also be enabled for ethash and clique. Only enable eirene for real if there is a validator contract present.
+		// If Zena iris consensus is requested, set it up
+		// In order to pass the zenanet transaction tests, we need to set the burn contract which is in the iris config
+		// Then, iris != nil will also be enabled for ethash and clique. Only enable iris for real if there is a validator contract present.
 		genesisContractsClient := contract.NewGenesisContractsClient(chainConfig, chainConfig.Zena.ValidatorContract, chainConfig.Zena.StateReceiverContract, blockchainAPI)
 		spanner := span.NewChainSpanner(blockchainAPI, contract.ValidatorSet(), chainConfig, common.HexToAddress(chainConfig.Zena.ValidatorContract))
 
-		if ethConfig.WithoutHeimdall {
-			return eirene.New(chainConfig, db, blockchainAPI, spanner, nil, genesisContractsClient, ethConfig.DevFakeAuthor), nil
+		if ethConfig.WithoutIris {
+			return iris.New(chainConfig, db, blockchainAPI, spanner, nil, genesisContractsClient, ethConfig.DevFakeAuthor), nil
 		} else {
 			if ethConfig.DevFakeAuthor {
-				log.Warn("Sanitizing DevFakeAuthor", "Use DevFakeAuthor with", "--zena.withoutheimdall")
+				log.Warn("Sanitizing DevFakeAuthor", "Use DevFakeAuthor with", "--zena.withoutiris")
 			}
 
-			var heimdallClient eirene.IHeimdallClient
-			if ethConfig.RunHeimdall && ethConfig.UseHeimdallApp {
-				heimdallClient = heimdallapp.NewHeimdallAppClient()
-			} else if ethConfig.HeimdallgRPCAddress != "" {
-				heimdallClient = heimdallgrpc.NewHeimdallGRPCClient(ethConfig.HeimdallgRPCAddress)
+			var irisClient iris.IIrisClient
+			if ethConfig.RunIris && ethConfig.UseIrisApp {
+				irisClient = irisapp.NewIrisAppClient()
+			} else if ethConfig.IrisgRPCAddress != "" {
+				irisClient = irisgrpc.NewIrisGRPCClient(ethConfig.IrisgRPCAddress)
 			} else {
-				heimdallClient = heimdall.NewHeimdallClient(ethConfig.HeimdallURL)
+				irisClient = iris.NewIrisClient(ethConfig.IrisURL)
 			}
 
-			return eirene.New(chainConfig, db, blockchainAPI, spanner, heimdallClient, genesisContractsClient, false), nil
+			return iris.New(chainConfig, db, blockchainAPI, spanner, irisClient, genesisContractsClient, false), nil
 		}
 	}
 	// If defaulting to proof-of-work, enforce an already merged network since

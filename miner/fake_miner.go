@@ -9,8 +9,8 @@ import (
 
 	"github.com/zenanetwork/go-zenanet/common"
 	"github.com/zenanetwork/go-zenanet/consensus"
-	"github.com/zenanetwork/go-zenanet/consensus/eirene/api"
-	"github.com/zenanetwork/go-zenanet/consensus/eirene/valset"
+	"github.com/zenanetwork/go-zenanet/consensus/iris/api"
+	"github.com/zenanetwork/go-zenanet/consensus/iris/valset"
 	"github.com/zenanetwork/go-zenanet/core"
 	"github.com/zenanetwork/go-zenanet/core/rawdb"
 	"github.com/zenanetwork/go-zenanet/core/state"
@@ -22,7 +22,7 @@ import (
 	"github.com/zenanetwork/go-zenanet/ethdb/memorydb"
 	"github.com/zenanetwork/go-zenanet/event"
 	"github.com/zenanetwork/go-zenanet/params"
-	"github.com/zenanetwork/go-zenanet/tests/eirene/mocks"
+	"github.com/zenanetwork/go-zenanet/tests/iris/mocks"
 	"github.com/zenanetwork/go-zenanet/triedb"
 )
 
@@ -31,10 +31,10 @@ type DefaultZenaMiner struct {
 	Mux     *event.TypeMux //nolint:staticcheck
 	Cleanup func(skipMiner bool)
 
-	Ctrl               *gomock.Controller
-	EthAPIMock         api.Caller
-	HeimdallClientMock Zena.IHeimdallClient
-	ContractMock       Zena.GenesisContract
+	Ctrl           *gomock.Controller
+	EthAPIMock     api.Caller
+	IrisClientMock Zena.IIrisClient
+	ContractMock   Zena.GenesisContract
 }
 
 func NewZenaDefaultMiner(t *testing.T) *DefaultZenaMiner {
@@ -55,32 +55,32 @@ func NewZenaDefaultMiner(t *testing.T) *DefaultZenaMiner {
 		},
 	}, nil).AnyTimes()
 
-	heimdallClient := mocks.NewMockIHeimdallClient(ctrl)
-	heimdallClient.EXPECT().Close().Times(1)
+	irisClient := mocks.NewMockIIrisClient(ctrl)
+	irisClient.EXPECT().Close().Times(1)
 
 	genesisContracts := zena.NewMockGenesisContract(ctrl)
 
-	miner, mux, cleanup := createZenaMiner(t, ethAPI, spanner, heimdallClient, genesisContracts)
+	miner, mux, cleanup := createZenaMiner(t, ethAPI, spanner, irisClient, genesisContracts)
 
 	return &DefaultZenaMiner{
-		Miner:              miner,
-		Mux:                mux,
-		Cleanup:            cleanup,
-		Ctrl:               ctrl,
-		EthAPIMock:         ethAPI,
-		HeimdallClientMock: heimdallClient,
-		ContractMock:       genesisContracts,
+		Miner:          miner,
+		Mux:            mux,
+		Cleanup:        cleanup,
+		Ctrl:           ctrl,
+		EthAPIMock:     ethAPI,
+		IrisClientMock: irisClient,
+		ContractMock:   genesisContracts,
 	}
 }
 
 // //nolint:staticcheck
-func createZenaMiner(t *testing.T, ethAPIMock api.Caller, spanner zena.Spanner, heimdallClientMock zena.IHeimdallClient, contractMock zena.GenesisContract) (*Miner, *event.TypeMux, func(skipMiner bool)) {
+func createZenaMiner(t *testing.T, ethAPIMock api.Caller, spanner zena.Spanner, irisClientMock zena.IIrisClient, contractMock zena.GenesisContract) (*Miner, *event.TypeMux, func(skipMiner bool)) {
 	t.Helper()
 
 	// Create Ethash config
 	chainDB, genspec, chainConfig := NewDBForFakes(t)
 
-	engine := NewFakeZena(t, chainDB, chainConfig, ethAPIMock, spanner, heimdallClientMock, contractMock)
+	engine := NewFakeZena(t, chainDB, chainConfig, ethAPIMock, spanner, irisClientMock, contractMock)
 
 	// Create Zenanet backend
 	bc, err := core.NewBlockChain(chainDB, nil, genspec, nil, engine, vm.Config{}, nil, nil, nil)
@@ -146,14 +146,14 @@ func NewDBForFakes(t TensingObject) (ethdb.Database, *core.Genesis, *params.Chai
 	return chainDB, genesis, chainConfig
 }
 
-func NewFakeZena(t TensingObject, chainDB ethdb.Database, chainConfig *params.ChainConfig, ethAPIMock api.Caller, spanner zena.Spanner, heimdallClientMock zena.IHeimdallClient, contractMock zena.GenesisContract) consensus.Engine {
+func NewFakeZena(t TensingObject, chainDB ethdb.Database, chainConfig *params.ChainConfig, ethAPIMock api.Caller, spanner zena.Spanner, irisClientMock zena.IIrisClient, contractMock zena.GenesisContract) consensus.Engine {
 	t.Helper()
 
 	if chainConfig.Zena == nil {
 		chainConfig.Zena = params.ZenaUnittestChainConfig.Zena
 	}
 
-	return zena.New(chainConfig, chainDB, ethAPIMock, spanner, heimdallClientMock, contractMock, false)
+	return zena.New(chainConfig, chainDB, ethAPIMock, spanner, irisClientMock, contractMock, false)
 }
 
 var (

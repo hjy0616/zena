@@ -702,7 +702,7 @@ func (c CliqueConfig) String() string {
 	return fmt.Sprintf("clique(period: %d, epoch: %d)", c.Period, c.Epoch)
 }
 
-// ZenaConfig is the consensus engine configs for Zena eirene based sealing.
+// ZenaConfig is the consensus engine configs for Zena iris based sealing.
 type ZenaConfig struct {
 	Period                     map[string]uint64      `json:"period"`                   // Number of seconds between blocks to enforce
 	ProducerDelay              map[string]uint64      `json:"producerDelay"`            // Number of seconds delay between two producer interval
@@ -836,7 +836,7 @@ func (c *ChainConfig) Description() string {
 			banner += "Consensus: Beacon (proof-of-stake), merged from Clique (proof-of-authority)\n"
 		}
 	case c.Zena != nil:
-		banner += "Consensus: eirene (proof-of-stake), merged from Ethash (proof-of-work)\n"
+		banner += "Consensus: iris (proof-of-stake), merged from Ethash (proof-of-work)\n"
 	default:
 		banner += "Consensus: unknown\n"
 	}

@@ -34,7 +34,7 @@ import (
 	"github.com/zenanetwork/go-zenanet/common"
 	"github.com/zenanetwork/go-zenanet/common/hexutil"
 	"github.com/zenanetwork/go-zenanet/consensus"
-	"github.com/zenanetwork/go-zenanet/consensus/eirene/statefull"
+	"github.com/zenanetwork/go-zenanet/consensus/iris/statefull"
 	"github.com/zenanetwork/go-zenanet/core"
 	"github.com/zenanetwork/go-zenanet/core/rawdb"
 	"github.com/zenanetwork/go-zenanet/core/state"

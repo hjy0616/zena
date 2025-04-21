@@ -33,8 +33,7 @@ import (
 	"github.com/zenanetwork/go-zenanet/consensus"
 	"github.com/zenanetwork/go-zenanet/consensus/beacon"
 	"github.com/zenanetwork/go-zenanet/consensus/clique"
-	"github.com/zenanetwork/go-zenanet/consensus/eirene"
-	"github.com/zenanetwork/go-zenanet/consensus/eirene/heimdall"
+	"github.com/zenanetwork/go-zenanet/consensus/iris"
 	"github.com/zenanetwork/go-zenanet/core"
 	"github.com/zenanetwork/go-zenanet/core/bloombits"
 	"github.com/zenanetwork/go-zenanet/core/rawdb"
@@ -533,7 +532,7 @@ func (s *Zenanet) StartMining() error {
 				cli.Authorize(eb, wallet.SignData)
 			}
 
-			if zena, ok := s.engine.(*eirene.Zena); ok {
+			if zena, ok := s.engine.(*iris.Zena); ok {
 				wallet, err := s.accountManager.Find(accounts.Account{Address: eb})
 				if wallet == nil || err != nil {
 					log.Error("Zenbase account unavailable locally", "err", err)
@@ -642,8 +641,8 @@ func (s *Zenanet) Start() error {
 }
 
 var (
-	ErrNotZenaConsensus             = errors.New("not zena consensus was given")
-	ErrZenaConsensusWithoutHeimdall = errors.New("zena consensus without heimdall")
+	ErrNotZenaConsensus         = errors.New("not zena consensus was given")
+	ErrZenaConsensusWithoutIris = errors.New("zena consensus without iris")
 )
 
 const (
@@ -659,7 +658,7 @@ func (s *Zenanet) startCheckpointWhitelistService() {
 		fnName         = "whitelist checkpoint"
 	)
 
-	s.retryHeimdallHandler(s.handleWhitelistCheckpoint, tickerDuration, whitelistTimeout, fnName)
+	s.retryIrisHandler(s.handleWhitelistCheckpoint, tickerDuration, whitelistTimeout, fnName)
 }
 
 // startMilestoneWhitelistService starts the goroutine to fetch milestiones and update the
@@ -670,7 +669,7 @@ func (s *Zenanet) startMilestoneWhitelistService() {
 		fnName         = "whitelist milestone"
 	)
 
-	s.retryHeimdallHandler(s.handleMilestone, tickerDuration, whitelistTimeout, fnName)
+	s.retryIrisHandler(s.handleMilestone, tickerDuration, whitelistTimeout, fnName)
 }
 
 func (s *Zenanet) startNoAckMilestoneService() {
@@ -679,7 +678,7 @@ func (s *Zenanet) startNoAckMilestoneService() {
 		fnName         = "no-ack-milestone service"
 	)
 
-	s.retryHeimdallHandler(s.handleNoAckMilestone, tickerDuration, noAckMilestoneTimeout, fnName)
+	s.retryIrisHandler(s.handleNoAckMilestone, tickerDuration, noAckMilestoneTimeout, fnName)
 }
 
 func (s *Zenanet) startNoAckMilestoneByIDService() {
@@ -688,14 +687,14 @@ func (s *Zenanet) startNoAckMilestoneByIDService() {
 		fnName         = "no-ack-milestone-by-id service"
 	)
 
-	s.retryHeimdallHandler(s.handleNoAckMilestoneByID, tickerDuration, noAckMilestoneTimeout, fnName)
+	s.retryIrisHandler(s.handleNoAckMilestoneByID, tickerDuration, noAckMilestoneTimeout, fnName)
 }
 
-func (s *Zenanet) retryHeimdallHandler(fn heimdallHandler, tickerDuration time.Duration, timeout time.Duration, fnName string) {
-	retryHeimdallHandler(fn, tickerDuration, timeout, fnName, s.closeCh, s.getHandler)
+func (s *Zenanet) retryIrisHandler(fn irisHandler, tickerDuration time.Duration, timeout time.Duration, fnName string) {
+	retryIrisHandler(fn, tickerDuration, timeout, fnName, s.closeCh, s.getHandler)
 }
 
-func retryHeimdallHandler(fn heimdallHandler, tickerDuration time.Duration, timeout time.Duration, fnName string, closeCh chan struct{}, getHandler func() (*ethHandler, *eirene.Zena, error)) {
+func retryIrisHandler(fn irisHandler, tickerDuration time.Duration, timeout time.Duration, fnName string, closeCh chan struct{}, getHandler func() (*ethHandler, *iris.Zena, error)) {
 	// a shortcut helps with tests and early exit
 	select {
 	case <-closeCh:
@@ -734,7 +733,7 @@ func retryHeimdallHandler(fn heimdallHandler, tickerDuration time.Duration, time
 }
 
 // handleWhitelistCheckpoint handles the checkpoint whitelist mechanism.
-func (s *Zenanet) handleWhitelistCheckpoint(ctx context.Context, ethHandler *ethHandler, zena *eirene.Zena) error {
+func (s *Zenanet) handleWhitelistCheckpoint(ctx context.Context, ethHandler *ethHandler, zena *iris.Zena) error {
 	// Create a new zena verifier, which will be used to verify checkpoints and milestones
 	verifier := newZenaVerifier()
 
@@ -751,10 +750,10 @@ func (s *Zenanet) handleWhitelistCheckpoint(ctx context.Context, ethHandler *eth
 	return nil
 }
 
-type heimdallHandler func(ctx context.Context, ethHandler *ethHandler, zena *eirene.Zena) error
+type irisHandler func(ctx context.Context, ethHandler *ethHandler, zena *iris.Zena) error
 
 // handleMilestone handles the milestone mechanism.
-func (s *Zenanet) handleMilestone(ctx context.Context, ethHandler *ethHandler, zena *eirene.Zena) error {
+func (s *Zenanet) handleMilestone(ctx context.Context, ethHandler *ethHandler, zena *iris.Zena) error {
 	// Create a new zena verifier, which will be used to verify checkpoints and milestones
 	verifier := newZenaVerifier()
 	num, hash, err := ethHandler.fetchWhitelistMilestone(ctx, zena, s, verifier)
@@ -766,7 +765,7 @@ func (s *Zenanet) handleMilestone(ctx context.Context, ethHandler *ethHandler, z
 		ethHandler.downloader.ProcessFutureMilestone(num, hash)
 	}
 
-	if errors.Is(err, heimdall.ErrServiceUnavailable) {
+	if errors.Is(err, iris.ErrServiceUnavailable) {
 		return nil
 	}
 
@@ -779,10 +778,10 @@ func (s *Zenanet) handleMilestone(ctx context.Context, ethHandler *ethHandler, z
 	return nil
 }
 
-func (s *Zenanet) handleNoAckMilestone(ctx context.Context, ethHandler *ethHandler, zena *eirene.Zena) error {
+func (s *Zenanet) handleNoAckMilestone(ctx context.Context, ethHandler *ethHandler, zena *iris.Zena) error {
 	milestoneID, err := ethHandler.fetchNoAckMilestone(ctx, zena)
 
-	if errors.Is(err, heimdall.ErrServiceUnavailable) {
+	if errors.Is(err, iris.ErrServiceUnavailable) {
 		return nil
 	}
 
@@ -795,7 +794,7 @@ func (s *Zenanet) handleNoAckMilestone(ctx context.Context, ethHandler *ethHandl
 	return nil
 }
 
-func (s *Zenanet) handleNoAckMilestoneByID(ctx context.Context, ethHandler *ethHandler, zena *eirene.Zena) error {
+func (s *Zenanet) handleNoAckMilestoneByID(ctx context.Context, ethHandler *ethHandler, zena *iris.Zena) error {
 	milestoneIDs := ethHandler.downloader.GetMilestoneIDsList()
 
 	for _, milestoneID := range milestoneIDs {
@@ -809,16 +808,16 @@ func (s *Zenanet) handleNoAckMilestoneByID(ctx context.Context, ethHandler *ethH
 	return nil
 }
 
-func (s *Zenanet) getHandler() (*ethHandler, *eirene.Zena, error) {
+func (s *Zenanet) getHandler() (*ethHandler, *iris.Zena, error) {
 	ethHandler := (*ethHandler)(s.handler)
 
-	zena, ok := ethHandler.chain.Engine().(*eirene.Zena)
+	zena, ok := ethHandler.chain.Engine().(*iris.Zena)
 	if !ok {
 		return nil, nil, ErrNotZenaConsensus
 	}
 
-	if zena.HeimdallClient == nil {
-		return nil, nil, ErrZenaConsensusWithoutHeimdall
+	if zena.IrisClient == nil {
+		return nil, nil, ErrZenaConsensusWithoutIris
 	}
 
 	return ethHandler, zena, nil
@@ -832,7 +831,7 @@ func (s *Zenanet) Stop() error {
 	s.snapDialCandidates.Close()
 
 	// Close the engine before handler else it may cause a deadlock where
-	// the heimdall is unresponsive and the syncing loop keeps waiting
+	// the iris is unresponsive and the syncing loop keeps waiting
 	// for a response and is unable to proceed to exit `Finalize` during
 	// block processing.
 	s.engine.Close()

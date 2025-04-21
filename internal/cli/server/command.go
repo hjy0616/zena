@@ -163,12 +163,12 @@ func (c *Command) Run(args []string) int {
 		return 1
 	}
 
-	if c.config.Heimdall.RunHeimdall {
+	if c.config.Iris.RunIris {
 		shutdownCtx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGINT, syscall.SIGTERM)
 		defer stop()
 
 		go func() {
-			service.NewHeimdallService(shutdownCtx, c.getHeimdallArgs())
+			service.NewIrisService(shutdownCtx, c.getIrisArgs())
 		}()
 	}
 
@@ -215,7 +215,7 @@ func (c *Command) GetConfig() *Config {
 	return c.cliConfig
 }
 
-func (c *Command) getHeimdallArgs() []string {
-	heimdallArgs := strings.Split(c.config.Heimdall.RunHeimdallArgs, ",")
-	return append([]string{"start"}, heimdallArgs...)
+func (c *Command) getIrisArgs() []string {
+	irisArgs := strings.Split(c.config.Iris.RunIrisArgs, ",")
+	return append([]string{"start"}, irisArgs...)
 }

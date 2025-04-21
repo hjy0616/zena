@@ -86,7 +86,7 @@ func NewService(db ethdb.Database) *Service {
 }
 
 // IsValidPeer checks if the chain we're about to receive from a peer is valid or not
-// in terms of reorgs. We won't reorg beyond the last zena checkpoint submitted to mainchain and last milestone voted in the heimdall
+// in terms of reorgs. We won't reorg beyond the last zena checkpoint submitted to mainchain and last milestone voted in the iris
 func (s *Service) IsValidPeer(fetchHeadersByNumber func(number uint64, amount int, skip int, reverse bool) ([]*types.Header, []common.Hash, error)) (bool, error) {
 	checkpointBool, err := s.checkpointService.IsValidPeer(fetchHeadersByNumber)
 	if !checkpointBool {
@@ -208,7 +208,7 @@ func isValidChain(currentHeader *types.Header, chain []*types.Header, doExist bo
 // FIXME: remoteHeader is not used
 func isValidPeer(fetchHeadersByNumber func(number uint64, amount int, skip int, reverse bool) ([]*types.Header, []common.Hash, error), doExist bool, number uint64, hash common.Hash) (bool, error) {
 	// Check for availability of the last milestone block.
-	// This can be also be empty if our heimdall is not responding
+	// This can be also be empty if our iris is not responding
 	// or we're running without it.
 	if !doExist {
 		// worst case, we don't have the milestone in memory

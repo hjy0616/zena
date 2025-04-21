@@ -28,10 +28,10 @@ In case this PR includes changes that must be applied only to a subset of nodes,
 
 # Cross repository changes
 
-- [ ] This PR requires changes to heimdall
-    - In case link the PR here:
+- [ ] This PR requires changes to iris
+  - In case link the PR here:
 - [ ] This PR requires changes to matic-cli
-    - In case link the PR here:
+  - In case link the PR here:
 
 ## Testing
 

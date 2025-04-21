@@ -15,7 +15,7 @@ import (
 	"github.com/zenanetwork/go-zenanet/accounts/keystore"
 	"github.com/zenanetwork/go-zenanet/cmd/utils"
 	"github.com/zenanetwork/go-zenanet/consensus/beacon" //nolint:typecheck
-	"github.com/zenanetwork/go-zenanet/consensus/eirene"    //nolint:typecheck
+	"github.com/zenanetwork/go-zenanet/consensus/iris"    //nolint:typecheck
 	"github.com/zenanetwork/go-zenanet/consensus/clique"
 	"github.com/zenanetwork/go-zenanet/eth"
 	"github.com/zenanetwork/go-zenanet/eth/ethconfig"

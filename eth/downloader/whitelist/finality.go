@@ -14,8 +14,8 @@ import (
 type finality[T rawdb.BlockFinality[T]] struct {
 	sync.RWMutex
 	db       ethdb.Database
-	Hash     common.Hash // Whitelisted Hash, populated by reaching out to heimdall
-	Number   uint64      // Number , populated by reaching out to heimdall
+	Hash     common.Hash // Whitelisted Hash, populated by reaching out to iris
+	Number   uint64      // Number , populated by reaching out to iris
 	interval uint64      // Interval, until which we can allow importing
 	doExist  bool
 	name     string // Name of the service (checkpoint or milestone)
@@ -58,7 +58,7 @@ func (f *finality[T]) IsValidChain(currentHeader *types.Header, chain []*types.H
 // reportWhitelist logs the block number and hash if a new and unique entry is being inserted
 // and it doesn't log for duplicate/redundant entries.
 func (f *finality[T]) reportWhitelist(block uint64, hash common.Hash) {
-	msg := fmt.Sprintf("Whitelisting new %s from heimdall", f.name)
+	msg := fmt.Sprintf("Whitelisting new %s from iris", f.name)
 	if !f.doExist {
 		log.Info(msg, "block", block, "hash", hash)
 	} else {

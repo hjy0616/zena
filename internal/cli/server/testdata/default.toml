@@ -46,13 +46,13 @@ devfakeauthor = false
     trusted-nodes = []
     dns = []
 
-[heimdall]
+[iris]
   url = "http://localhost:1317"
   "zena.without" = false
   grpc-address = ""
-  "zena.runheimdall" = false
-  "zena.runheimdallargs" = ""
-  "zena.useheimdallapp" = false
+  "zena.runiris" = false
+  "zena.runirisargs" = ""
+  "zena.useirisapp" = false
 
 [txpool]
   locals = []

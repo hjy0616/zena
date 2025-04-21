@@ -42,7 +42,7 @@ syncmode = "full"
         # trusted-nodes = []
         dns = [ "enrtree://AKUEZKN7PSKVNR65FZDHECMKOJQSGPARGTPPBI7WS2VUL4EGR6XPC@amoy.polygon-peers.io" ]
 
-# [heimdall]
+# [iris]
     # url = "http://localhost:1317"
     # "zena.without" = false
     # grpc-address = ""

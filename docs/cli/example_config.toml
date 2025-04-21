@@ -18,7 +18,7 @@ gcmode = "full"                 # Blockchain garbage collection mode ("full", "a
 snapshot = true                 # Enables the snapshot-database mode
 "zena.logs" = false              # Enables zena log retrieval
 ethstats = ""                   # Reporting URL of a ethstats service (nodename:secret@host:port)
-devfakeauthor = false           # Run miner without validator set authorization [dev mode] : Use with '--zena.withoutheimdall' (default: false)
+devfakeauthor = false           # Run miner without validator set authorization [dev mode] : Use with '--zena.withoutiris' (default: false)
 
 ["eth.requiredblocks"]  # Comma separated block number-to-hash mappings to require for peering (<number>=<hash>) (default = empty map)
   "31000000" = "0x2087b9e2b353209c2c21e370c82daa12278efd0fe5f0febe6c29035352cf050e"
@@ -52,10 +52,10 @@ devfakeauthor = false           # Run miner without validator set authorization 
     trusted-nodes = []  # List of trusted nodes
     dns = []            # List of enrtree:// URLs which will be queried for nodes to connect to
 
-[heimdall]
-  url = "http://localhost:1317"  # URL of Eirene service
-  "zena.without" = false          # Run without Eirene service (for testing purpose)
-  grpc-address = ""              # Address of Eirene gRPC service
+[iris]
+  url = "http://localhost:1317"  # URL of Iris service
+  "zena.without" = false          # Run without Iris service (for testing purpose)
+  grpc-address = ""              # Address of Iris gRPC service
 
 [txpool]
   locals = []                   # Comma separated accounts to treat as locals (no flush, priority inclusion)

@@ -15,63 +15,63 @@ var (
 	// Zena Specific flags
 	//
 
-	// HeimdallURLFlag flag for heimdall url
-	HeimdallURLFlag = &cli.StringFlag{
-		Name:  "zena.eirene",
-		Usage: "URL of Heimdall service",
+	// IrisURLFlag flag for iris url
+	IrisURLFlag = &cli.StringFlag{
+		Name:  "zena.iris",
+		Usage: "URL of Iris service",
 		Value: "http://localhost:1317",
 	}
 
-	// WithoutHeimdallFlag no heimdall (for testing purpose)
-	WithoutHeimdallFlag = &cli.BoolFlag{
-		Name:  "zena.withoutheimdall",
-		Usage: "Run without Heimdall service (for testing purpose)",
+	// WithoutIrisFlag no iris (for testing purpose)
+	WithoutIrisFlag = &cli.BoolFlag{
+		Name:  "zena.withoutiris",
+		Usage: "Run without iris service (for testing purpose)",
 	}
 
-	// HeimdallgRPCAddressFlag flag for heimdall gRPC address
-	HeimdallgRPCAddressFlag = &cli.StringFlag{
-		Name:  "zena.heimdallgRPC",
-		Usage: "Address of Heimdall gRPC service",
+	// IrisgRPCAddressFlag flag for iris gRPC address
+	IrisgRPCAddressFlag = &cli.StringFlag{
+		Name:  "zena.irisgRPC",
+		Usage: "Address of Iris gRPC service",
 		Value: "",
 	}
 
-	// RunHeimdallFlag flag for running heimdall internally from zena
-	RunHeimdallFlag = &cli.BoolFlag{
-		Name:  "zena.runheimdall",
-		Usage: "Run Heimdall service as a child process",
+	// RunIrisFlag flag for running iris internally from zena
+	RunIrisFlag = &cli.BoolFlag{
+		Name:  "zena.runiris",
+		Usage: "Run Iris service as a child process",
 	}
 
-	RunHeimdallArgsFlag = &cli.StringFlag{
-		Name:  "zena.runheimdallargs",
-		Usage: "Arguments to pass to Heimdall service",
+	RunIrisArgsFlag = &cli.StringFlag{
+		Name:  "zena.runirisargs",
+		Usage: "Arguments to pass to Iris service",
 		Value: "",
 	}
 
-	// UseHeimdallApp flag for using internal heimdall app to fetch data
-	UseHeimdallAppFlag = &cli.BoolFlag{
-		Name:  "zena.useheimdallapp",
-		Usage: "Use child heimdall process to fetch data, Only works when zena.runheimdall is true",
+	// UseIrisApp flag for using internal iris app to fetch data
+	UseIrisAppFlag = &cli.BoolFlag{
+		Name:  "zena.useirisapp",
+		Usage: "Use child iris process to fetch data, Only works when zena.runiris is true",
 	}
 
 	// ZenaFlags all zena related flags
 	ZenaFlags = []cli.Flag{
-		HeimdallURLFlag,
-		WithoutHeimdallFlag,
-		HeimdallgRPCAddressFlag,
-		RunHeimdallFlag,
-		RunHeimdallArgsFlag,
-		UseHeimdallAppFlag,
+		IrisURLFlag,
+		WithoutIrisFlag,
+		IrisgRPCAddressFlag,
+		RunIrisFlag,
+		RunIrisArgsFlag,
+		UseIrisAppFlag,
 	}
 )
 
 // SetZenaConfig sets zena config
 func SetZenaConfig(ctx *cli.Context, cfg *eth.Config) {
-	cfg.HeimdallURL = ctx.String(HeimdallURLFlag.Name)
-	cfg.WithoutHeimdall = ctx.Bool(WithoutHeimdallFlag.Name)
-	cfg.HeimdallgRPCAddress = ctx.String(HeimdallgRPCAddressFlag.Name)
-	cfg.RunHeimdall = ctx.Bool(RunHeimdallFlag.Name)
-	cfg.RunHeimdallArgs = ctx.String(RunHeimdallArgsFlag.Name)
-	cfg.UseHeimdallApp = ctx.Bool(UseHeimdallAppFlag.Name)
+	cfg.IrisURL = ctx.String(IrisURLFlag.Name)
+	cfg.WithoutIris = ctx.Bool(WithoutIrisFlag.Name)
+	cfg.IrisgRPCAddress = ctx.String(IrisgRPCAddressFlag.Name)
+	cfg.RunIris = ctx.Bool(RunIrisFlag.Name)
+	cfg.RunIrisArgs = ctx.String(RunIrisArgsFlag.Name)
+	cfg.UseIrisApp = ctx.Bool(UseIrisAppFlag.Name)
 }
 
 // CreateZenaZenanet Creates zena zenanet object from eth.Config

@@ -62,12 +62,12 @@ func (c Config) MarshalTOML() (interface{}, error) {
 		RPCEVMTimeout                        time.Duration
 		RPCTxFeeCap                          float64
 		OverrideCancun                       *big.Int `toml:",omitempty"`
-		HeimdallURL                          string
-		WithoutHeimdall                      bool
-		HeimdallgRPCAddress                  string
-		RunHeimdall                          bool
-		RunHeimdallArgs                      string
-		UseHeimdallApp                       bool
+		IrisURL                          string
+		WithoutIris                      bool
+		IrisgRPCAddress                  string
+		RunIris                          bool
+		RunIrisArgs                      string
+		UseIrisApp                       bool
 		ZenaLogs                              bool
 		ParallelEVM                          core.ParallelEVMConfig `toml:",omitempty"`
 		DevFakeAuthor                        bool                   `hcl:"devfakeauthor,optional" toml:"devfakeauthor,optional"`
@@ -118,12 +118,12 @@ func (c Config) MarshalTOML() (interface{}, error) {
 	enc.RPCEVMTimeout = c.RPCEVMTimeout
 	enc.RPCTxFeeCap = c.RPCTxFeeCap
 	enc.OverrideCancun = c.OverrideCancun
-	enc.HeimdallURL = c.HeimdallURL
-	enc.WithoutHeimdall = c.WithoutHeimdall
-	enc.HeimdallgRPCAddress = c.HeimdallgRPCAddress
-	enc.RunHeimdall = c.RunHeimdall
-	enc.RunHeimdallArgs = c.RunHeimdallArgs
-	enc.UseHeimdallApp = c.UseHeimdallApp
+	enc.IrisURL = c.IrisURL
+	enc.WithoutIris = c.WithoutIris
+	enc.IrisgRPCAddress = c.IrisgRPCAddress
+	enc.RunIris = c.RunIris
+	enc.RunIrisArgs = c.RunIrisArgs
+	enc.UseIrisApp = c.UseIrisApp
 	enc.ZenaLogs = c.ZenaLogs
 	enc.ParallelEVM = c.ParallelEVM
 	enc.DevFakeAuthor = c.DevFakeAuthor
@@ -178,12 +178,12 @@ func (c *Config) UnmarshalTOML(unmarshal func(interface{}) error) error {
 		RPCEVMTimeout                        *time.Duration
 		RPCTxFeeCap                          *float64
 		OverrideCancun                       *big.Int `toml:",omitempty"`
-		HeimdallURL                          *string
-		WithoutHeimdall                      *bool
-		HeimdallgRPCAddress                  *string
-		RunHeimdall                          *bool
-		RunHeimdallArgs                      *string
-		UseHeimdallApp                       *bool
+		IrisURL                          *string
+		WithoutIris                      *bool
+		IrisgRPCAddress                  *string
+		RunIris                          *bool
+		RunIrisArgs                      *string
+		UseIrisApp                       *bool
 		ZenaLogs                              *bool
 		ParallelEVM                          *core.ParallelEVMConfig `toml:",omitempty"`
 		DevFakeAuthor                        *bool                   `hcl:"devfakeauthor,optional" toml:"devfakeauthor,optional"`
@@ -325,23 +325,23 @@ func (c *Config) UnmarshalTOML(unmarshal func(interface{}) error) error {
 	if dec.OverrideCancun != nil {
 		c.OverrideCancun = dec.OverrideCancun
 	}
-	if dec.HeimdallURL != nil {
-		c.HeimdallURL = *dec.HeimdallURL
+	if dec.IrisURL != nil {
+		c.IrisURL = *dec.IrisURL
 	}
-	if dec.WithoutHeimdall != nil {
-		c.WithoutHeimdall = *dec.WithoutHeimdall
+	if dec.WithoutIris != nil {
+		c.WithoutIris = *dec.WithoutIris
 	}
-	if dec.HeimdallgRPCAddress != nil {
-		c.HeimdallgRPCAddress = *dec.HeimdallgRPCAddress
+	if dec.IrisgRPCAddress != nil {
+		c.IrisgRPCAddress = *dec.IrisgRPCAddress
 	}
-	if dec.RunHeimdall != nil {
-		c.RunHeimdall = *dec.RunHeimdall
+	if dec.RunIris != nil {
+		c.RunIris = *dec.RunIris
 	}
-	if dec.RunHeimdallArgs != nil {
-		c.RunHeimdallArgs = *dec.RunHeimdallArgs
+	if dec.RunIrisArgs != nil {
+		c.RunIrisArgs = *dec.RunIrisArgs
 	}
-	if dec.UseHeimdallApp != nil {
-		c.UseHeimdallApp = *dec.UseHeimdallApp
+	if dec.UseIrisApp != nil {
+		c.UseIrisApp = *dec.UseIrisApp
 	}
 	if dec.ZenaLogs != nil {
 		c.ZenaLogs = *dec.ZenaLogs

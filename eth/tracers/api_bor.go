@@ -5,7 +5,7 @@ import (
 	"fmt"
 
 	"github.com/zenanetwork/go-zenanet/common"
-	"github.com/zenanetwork/go-zenanet/consensus/eirene/statefull"
+	"github.com/zenanetwork/go-zenanet/consensus/iris/statefull"
 	"github.com/zenanetwork/go-zenanet/core"
 	"github.com/zenanetwork/go-zenanet/core/types"
 	"github.com/zenanetwork/go-zenanet/core/vm"

@@ -45,7 +45,7 @@ gcmode = "archive"
         # trusted-nodes = []
         dns =  [ "enrtree://AKUEZKN7PSKVNR65FZDHECMKOJQSGPARGTPPBI7WS2VUL4EGR6XPC@pos.polygon-peers.io" ]
 
-# [heimdall]
+# [iris]
     # url = "http://localhost:1317"
     # "zena.without" = false
     # grpc-address = ""
