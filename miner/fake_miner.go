@@ -9,8 +9,9 @@ import (
 
 	"github.com/zenanetwork/go-zenanet/common"
 	"github.com/zenanetwork/go-zenanet/consensus"
-	"github.com/zenanetwork/go-zenanet/consensus/iris/api"
-	"github.com/zenanetwork/go-zenanet/consensus/iris/valset"
+	"github.com/zenanetwork/go-zenanet/consensus/zena/api"
+	"github.com/zenanetwork/go-zenanet/consensus/zena/valset"
+	"github.com/zenanetwork/go-zenanet/consensus/zena"
 	"github.com/zenanetwork/go-zenanet/core"
 	"github.com/zenanetwork/go-zenanet/core/rawdb"
 	"github.com/zenanetwork/go-zenanet/core/state"
@@ -22,7 +23,7 @@ import (
 	"github.com/zenanetwork/go-zenanet/ethdb/memorydb"
 	"github.com/zenanetwork/go-zenanet/event"
 	"github.com/zenanetwork/go-zenanet/params"
-	"github.com/zenanetwork/go-zenanet/tests/iris/mocks"
+	"github.com/zenanetwork/go-zenanet/tests/zena/mocks"
 	"github.com/zenanetwork/go-zenanet/triedb"
 )
 
@@ -33,8 +34,8 @@ type DefaultZenaMiner struct {
 
 	Ctrl           *gomock.Controller
 	EthAPIMock     api.Caller
-	IrisClientMock Zena.IIrisClient
-	ContractMock   Zena.GenesisContract
+	IrisClientMock zena.IIrisClient
+	ContractMock   zena.GenesisContract
 }
 
 func NewZenaDefaultMiner(t *testing.T) *DefaultZenaMiner {

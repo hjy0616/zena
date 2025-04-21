@@ -6,9 +6,9 @@ import (
 	"github.com/zenanetwork/go-zenanet/internal/cli/server/proto"
 	"github.com/zenanetwork/go-zenanet/p2p"
 
-	protobor "github.com/maticnetwork/polyproto/bor"
-	protocommon "github.com/maticnetwork/polyproto/common"
-	protoutil "github.com/maticnetwork/polyproto/utils"
+	protocommon "github.com/zenanetwork/zenaproto/common"
+	protoutil "github.com/zenanetwork/zenaproto/utils"
+	protozena "github.com/zenanetwork/zenaproto/zena"
 )
 
 func PeerInfoToPeer(info *p2p.PeerInfo) *proto.Peer {
@@ -23,16 +23,16 @@ func PeerInfoToPeer(info *p2p.PeerInfo) *proto.Peer {
 	}
 }
 
-func ConvertBloomToProtoBloom(bloom types.Bloom) *protobor.Bloom {
-	return &protobor.Bloom{
+func ConvertBloomToProtoBloom(bloom types.Bloom) *protozena.Bloom {
+	return &protozena.Bloom{
 		Bloom: bloom.Bytes(),
 	}
 }
 
-func ConvertLogsToProtoLogs(logs []*types.Log) []*protobor.Log {
-	var protoLogs []*protobor.Log
+func ConvertLogsToProtoLogs(logs []*types.Log) []*protozena.Log {
+	var protoLogs []*protozena.Log
 	for _, log := range logs {
-		protoLog := &protobor.Log{
+		protoLog := &protozena.Log{
 			Address:     protoutil.ConvertAddressToH160(log.Address),
 			Topics:      ConvertTopicsToProtoTopics(log.Topics),
 			Data:        log.Data,
@@ -58,8 +58,8 @@ func ConvertTopicsToProtoTopics(topics []common.Hash) []*protocommon.H256 {
 	return protoTopics
 }
 
-func ConvertReceiptToProtoReceipt(receipt *types.Receipt) *protobor.Receipt {
-	return &protobor.Receipt{
+func ConvertReceiptToProtoReceipt(receipt *types.Receipt) *protozena.Receipt {
+	return &protozena.Receipt{
 		Type:              uint64(receipt.Type),
 		PostState:         receipt.PostState,
 		Status:            receipt.Status,

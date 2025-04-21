@@ -30,11 +30,12 @@ import (
 	"sync"
 	"time"
 
+	"github.com/holiman/uint256"
 	"github.com/zenanetwork/go-zenanet"
 	"github.com/zenanetwork/go-zenanet/common"
 	"github.com/zenanetwork/go-zenanet/common/hexutil"
 	"github.com/zenanetwork/go-zenanet/consensus"
-	"github.com/zenanetwork/go-zenanet/consensus/iris/statefull"
+	"github.com/zenanetwork/go-zenanet/consensus/zena/statefull"
 	"github.com/zenanetwork/go-zenanet/core"
 	"github.com/zenanetwork/go-zenanet/core/rawdb"
 	"github.com/zenanetwork/go-zenanet/core/state"
@@ -48,7 +49,6 @@ import (
 	"github.com/zenanetwork/go-zenanet/params"
 	"github.com/zenanetwork/go-zenanet/rlp"
 	"github.com/zenanetwork/go-zenanet/rpc"
-	"github.com/holiman/uint256"
 )
 
 const (
@@ -203,7 +203,7 @@ type TraceConfig struct {
 	IOFlag  *bool
 	// Config specific to given tracer. Note struct logger
 	// config are historically embedded in main object.
-	TracerConfig    json.RawMessage
+	TracerConfig     json.RawMessage
 	ZenaTraceEnabled *bool
 	ZenaTx           *bool
 }
@@ -220,8 +220,8 @@ type TraceCallConfig struct {
 // StdTraceConfig holds extra parameters to standard-json trace functions.
 type StdTraceConfig struct {
 	logger.Config
-	Reexec          *uint64
-	TxHash          common.Hash
+	Reexec           *uint64
+	TxHash           common.Hash
 	ZenaTraceEnabled *bool
 }
 

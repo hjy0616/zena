@@ -27,11 +27,11 @@ import (
 	"github.com/zenanetwork/go-zenanet/consensus/beacon"
 	"github.com/zenanetwork/go-zenanet/consensus/clique"
 	"github.com/zenanetwork/go-zenanet/consensus/ethash"
-	"github.com/zenanetwork/go-zenanet/consensus/iris"
-	"github.com/zenanetwork/go-zenanet/consensus/iris/contract" //nolint:typecheck
-	"github.com/zenanetwork/go-zenanet/consensus/iris/irisapp"
-	"github.com/zenanetwork/go-zenanet/consensus/iris/irisd/span"
-	"github.com/zenanetwork/go-zenanet/consensus/iris/irisgrpc"
+	"github.com/zenanetwork/go-zenanet/consensus/zena"
+	"github.com/zenanetwork/go-zenanet/consensus/zena/contract" //nolint:typecheck
+	"github.com/zenanetwork/go-zenanet/consensus/zena/iris/span"
+	"github.com/zenanetwork/go-zenanet/consensus/zena/irisapp"
+	"github.com/zenanetwork/go-zenanet/consensus/zena/irisgrpc"
 	"github.com/zenanetwork/go-zenanet/core"
 	"github.com/zenanetwork/go-zenanet/core/txpool/blobpool"
 	"github.com/zenanetwork/go-zenanet/core/txpool/legacypool"
@@ -229,22 +229,22 @@ func CreateConsensusEngine(chainConfig *params.ChainConfig, ethConfig *Config, d
 		spanner := span.NewChainSpanner(blockchainAPI, contract.ValidatorSet(), chainConfig, common.HexToAddress(chainConfig.Zena.ValidatorContract))
 
 		if ethConfig.WithoutIris {
-			return iris.New(chainConfig, db, blockchainAPI, spanner, nil, genesisContractsClient, ethConfig.DevFakeAuthor), nil
+			return zena.New(chainConfig, db, blockchainAPI, spanner, nil, genesisContractsClient, ethConfig.DevFakeAuthor), nil
 		} else {
 			if ethConfig.DevFakeAuthor {
 				log.Warn("Sanitizing DevFakeAuthor", "Use DevFakeAuthor with", "--zena.withoutiris")
 			}
 
-			var irisClient iris.IIrisClient
+			var irisClient zena.IIrisClient
 			if ethConfig.RunIris && ethConfig.UseIrisApp {
 				irisClient = irisapp.NewIrisAppClient()
 			} else if ethConfig.IrisgRPCAddress != "" {
 				irisClient = irisgrpc.NewIrisGRPCClient(ethConfig.IrisgRPCAddress)
 			} else {
-				irisClient = iris.NewIrisClient(ethConfig.IrisURL)
+				irisClient = zena.NewIrisClient(ethConfig.IrisURL)
 			}
 
-			return iris.New(chainConfig, db, blockchainAPI, spanner, irisClient, genesisContractsClient, false), nil
+			return zena.New(chainConfig, db, blockchainAPI, spanner, irisClient, genesisContractsClient, false), nil
 		}
 	}
 	// If defaulting to proof-of-work, enforce an already merged network since

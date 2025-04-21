@@ -11,12 +11,14 @@ import (
 	"runtime"
 	"time"
 
+	"github.com/mattn/go-colorable"
+	"github.com/mattn/go-isatty"
 	"github.com/zenanetwork/go-zenanet/accounts"
 	"github.com/zenanetwork/go-zenanet/accounts/keystore"
 	"github.com/zenanetwork/go-zenanet/cmd/utils"
 	"github.com/zenanetwork/go-zenanet/consensus/beacon" //nolint:typecheck
-	"github.com/zenanetwork/go-zenanet/consensus/iris"    //nolint:typecheck
 	"github.com/zenanetwork/go-zenanet/consensus/clique"
+	"github.com/zenanetwork/go-zenanet/consensus/zena"
 	"github.com/zenanetwork/go-zenanet/eth"
 	"github.com/zenanetwork/go-zenanet/eth/ethconfig"
 	"github.com/zenanetwork/go-zenanet/eth/tracers"
@@ -30,8 +32,6 @@ import (
 	"github.com/zenanetwork/go-zenanet/metrics/prometheus"
 	"github.com/zenanetwork/go-zenanet/node"
 	"github.com/zenanetwork/go-zenanet/rpc"
-	"github.com/mattn/go-colorable"
-	"github.com/mattn/go-isatty"
 	"go.opentelemetry.io/otel"
 	"go.opentelemetry.io/otel/exporters/otlp/otlptrace/otlptracegrpc"
 	"go.opentelemetry.io/otel/propagation"
@@ -45,12 +45,12 @@ import (
 	_ "github.com/zenanetwork/go-zenanet/eth/tracers/js"
 	_ "github.com/zenanetwork/go-zenanet/eth/tracers/native"
 
-	protobor "github.com/maticnetwork/polyproto/bor"
+	protozena "github.com/zenanetwork/zenaproto/zena"
 )
 
 type Server struct {
-	proto.UnimplementedBorServer
-	protobor.UnimplementedBorApiServer
+	proto.UnimplementedZenaServer
+	protozena.UnimplementedZenaApiServer
 
 	node       *node.Node
 	backend    *eth.Zenanet
@@ -174,7 +174,7 @@ func NewServer(config *Config, opts ...serverOption) (*Server, error) {
 
 	// check if personal wallet endpoints are disabled or not
 	// nolint:nestif
-	if !config.Accounts.DisableBorWallet {
+	if !config.Accounts.DisableZenaWallet {
 		// add keystore globally to the node's account manager if personal wallet is enabled
 		stack.AccountManager().AddBackend(keystore.NewKeyStore(keydir, n, p))
 
@@ -237,7 +237,7 @@ func NewServer(config *Config, opts ...serverOption) (*Server, error) {
 			}
 
 			// Authorize the bor consensus (if chosen) to sign using wallet signer
-			if bor, ok := srv.backend.Engine().(*bor.Bor); ok {
+			if bor, ok := srv.backend.Engine().(*zena.Zena); ok {
 				wallet, err := accountManager.Find(accounts.Account{Address: eb})
 				if wallet == nil || err != nil {
 					log.Error("Zenbase account unavailable locally", "err", err)
@@ -442,8 +442,8 @@ func (s *Server) gRPCServerByAddress(addr string) error {
 
 func (s *Server) gRPCServerByListener(listener net.Listener) error {
 	s.grpcServer = grpc.NewServer(s.withLoggingUnaryInterceptor())
-	proto.RegisterBorServer(s.grpcServer, s)
-	protobor.RegisterBorApiServer(s.grpcServer, s)
+	proto.RegisterZenaServer(s.grpcServer, s)
+	protozena.RegisterZenaApiServer(s.grpcServer, s)
 	reflection.Register(s.grpcServer)
 
 	go func() {

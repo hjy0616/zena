@@ -33,7 +33,8 @@ import (
 	"github.com/zenanetwork/go-zenanet/consensus"
 	"github.com/zenanetwork/go-zenanet/consensus/beacon"
 	"github.com/zenanetwork/go-zenanet/consensus/clique"
-	"github.com/zenanetwork/go-zenanet/consensus/iris"
+	"github.com/zenanetwork/go-zenanet/consensus/zena"
+	"github.com/zenanetwork/go-zenanet/consensus/zena/iris"
 	"github.com/zenanetwork/go-zenanet/core"
 	"github.com/zenanetwork/go-zenanet/core/bloombits"
 	"github.com/zenanetwork/go-zenanet/core/rawdb"
@@ -532,7 +533,7 @@ func (s *Zenanet) StartMining() error {
 				cli.Authorize(eb, wallet.SignData)
 			}
 
-			if zena, ok := s.engine.(*iris.Zena); ok {
+			if zena, ok := s.engine.(*zena.Zena); ok {
 				wallet, err := s.accountManager.Find(accounts.Account{Address: eb})
 				if wallet == nil || err != nil {
 					log.Error("Zenbase account unavailable locally", "err", err)
@@ -694,7 +695,7 @@ func (s *Zenanet) retryIrisHandler(fn irisHandler, tickerDuration time.Duration,
 	retryIrisHandler(fn, tickerDuration, timeout, fnName, s.closeCh, s.getHandler)
 }
 
-func retryIrisHandler(fn irisHandler, tickerDuration time.Duration, timeout time.Duration, fnName string, closeCh chan struct{}, getHandler func() (*ethHandler, *iris.Zena, error)) {
+func retryIrisHandler(fn irisHandler, tickerDuration time.Duration, timeout time.Duration, fnName string, closeCh chan struct{}, getHandler func() (*ethHandler, *zena.Zena, error)) {
 	// a shortcut helps with tests and early exit
 	select {
 	case <-closeCh:
@@ -733,7 +734,7 @@ func retryIrisHandler(fn irisHandler, tickerDuration time.Duration, timeout time
 }
 
 // handleWhitelistCheckpoint handles the checkpoint whitelist mechanism.
-func (s *Zenanet) handleWhitelistCheckpoint(ctx context.Context, ethHandler *ethHandler, zena *iris.Zena) error {
+func (s *Zenanet) handleWhitelistCheckpoint(ctx context.Context, ethHandler *ethHandler, zena *zena.Zena) error {
 	// Create a new zena verifier, which will be used to verify checkpoints and milestones
 	verifier := newZenaVerifier()
 
@@ -750,10 +751,10 @@ func (s *Zenanet) handleWhitelistCheckpoint(ctx context.Context, ethHandler *eth
 	return nil
 }
 
-type irisHandler func(ctx context.Context, ethHandler *ethHandler, zena *iris.Zena) error
+type irisHandler func(ctx context.Context, ethHandler *ethHandler, zena *zena.Zena) error
 
 // handleMilestone handles the milestone mechanism.
-func (s *Zenanet) handleMilestone(ctx context.Context, ethHandler *ethHandler, zena *iris.Zena) error {
+func (s *Zenanet) handleMilestone(ctx context.Context, ethHandler *ethHandler, zena *zena.Zena) error {
 	// Create a new zena verifier, which will be used to verify checkpoints and milestones
 	verifier := newZenaVerifier()
 	num, hash, err := ethHandler.fetchWhitelistMilestone(ctx, zena, s, verifier)
@@ -778,7 +779,7 @@ func (s *Zenanet) handleMilestone(ctx context.Context, ethHandler *ethHandler, z
 	return nil
 }
 
-func (s *Zenanet) handleNoAckMilestone(ctx context.Context, ethHandler *ethHandler, zena *iris.Zena) error {
+func (s *Zenanet) handleNoAckMilestone(ctx context.Context, ethHandler *ethHandler, zena *zena.Zena) error {
 	milestoneID, err := ethHandler.fetchNoAckMilestone(ctx, zena)
 
 	if errors.Is(err, iris.ErrServiceUnavailable) {
@@ -794,7 +795,7 @@ func (s *Zenanet) handleNoAckMilestone(ctx context.Context, ethHandler *ethHandl
 	return nil
 }
 
-func (s *Zenanet) handleNoAckMilestoneByID(ctx context.Context, ethHandler *ethHandler, zena *iris.Zena) error {
+func (s *Zenanet) handleNoAckMilestoneByID(ctx context.Context, ethHandler *ethHandler, zena *zena.Zena) error {
 	milestoneIDs := ethHandler.downloader.GetMilestoneIDsList()
 
 	for _, milestoneID := range milestoneIDs {
@@ -808,10 +809,10 @@ func (s *Zenanet) handleNoAckMilestoneByID(ctx context.Context, ethHandler *ethH
 	return nil
 }
 
-func (s *Zenanet) getHandler() (*ethHandler, *iris.Zena, error) {
+func (s *Zenanet) getHandler() (*ethHandler, *zena.Zena, error) {
 	ethHandler := (*ethHandler)(s.handler)
 
-	zena, ok := ethHandler.chain.Engine().(*iris.Zena)
+	zena, ok := ethHandler.chain.Engine().(*zena.Zena)
 	if !ok {
 		return nil, nil, ErrNotZenaConsensus
 	}

@@ -30,9 +30,9 @@ import (
 	"github.com/zenanetwork/go-zenanet/consensus"
 	"github.com/zenanetwork/go-zenanet/consensus/clique"
 	"github.com/zenanetwork/go-zenanet/consensus/ethash"
-	"github.com/zenanetwork/go-zenanet/consensus/iris"
-	"github.com/zenanetwork/go-zenanet/consensus/iris/api"
-	"github.com/zenanetwork/go-zenanet/consensus/iris/valset"
+	"github.com/zenanetwork/go-zenanet/consensus/zena"
+	"github.com/zenanetwork/go-zenanet/consensus/zena/api"
+	"github.com/zenanetwork/go-zenanet/consensus/zena/valset"
 	"github.com/zenanetwork/go-zenanet/core"
 	"github.com/zenanetwork/go-zenanet/core/rawdb"
 	"github.com/zenanetwork/go-zenanet/core/txpool"
@@ -44,7 +44,7 @@ import (
 	"github.com/zenanetwork/go-zenanet/event"
 	"github.com/zenanetwork/go-zenanet/log"
 	"github.com/zenanetwork/go-zenanet/params"
-	"github.com/zenanetwork/go-zenanet/tests/iris/mocks"
+	"github.com/zenanetwork/go-zenanet/tests/zena/mocks"
 	"github.com/zenanetwork/go-zenanet/triedb"
 	"gotest.tools/assert"
 )
@@ -230,7 +230,7 @@ func newTestWorkerBackend(t TensingObject, chainConfig *params.ChainConfig, engi
 		Alloc:  types.GenesisAlloc{testBankAddress: {Balance: testBankFunds}},
 	}
 	switch e := engine.(type) {
-	case *iris.Zena:
+	case *zena.Zena:
 		gspec.ExtraData = make([]byte, 32+common.AddressLength+crypto.SignatureLength)
 		copy(gspec.ExtraData[32:32+common.AddressLength], TestBankAddress.Bytes())
 		e.Authorize(TestBankAddress, func(account accounts.Account, s string, data []byte) ([]byte, error) {
@@ -383,7 +383,7 @@ func getFakeZenaFromConfig(t *testing.T, chainConfig *params.ChainConfig) (conse
 	ethAPIMock := api.NewMockCaller(ctrl)
 	ethAPIMock.EXPECT().Call(gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any()).AnyTimes()
 
-	spanner := iris.NewMockSpanner(ctrl)
+	spanner := zena.NewMockSpanner(ctrl)
 	spanner.EXPECT().GetCurrentValidatorsByHash(gomock.Any(), gomock.Any(), gomock.Any()).Return([]*valset.Validator{
 		{
 			ID:               0,
@@ -396,7 +396,7 @@ func getFakeZenaFromConfig(t *testing.T, chainConfig *params.ChainConfig) (conse
 	irisClientMock := mocks.NewMockIIrisClient(ctrl)
 	irisClientMock.EXPECT().Close().AnyTimes()
 
-	contractMock := iris.NewMockGenesisContract(ctrl)
+	contractMock := zena.NewMockGenesisContract(ctrl)
 
 	db, _, _ := NewDBForFakes(t)
 
@@ -934,7 +934,7 @@ func BenchmarkZenaMining(b *testing.B) {
 	ethAPIMock := api.NewMockCaller(ctrl)
 	ethAPIMock.EXPECT().Call(gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any()).AnyTimes()
 
-	spanner := iris.NewMockSpanner(ctrl)
+	spanner := zena.NewMockSpanner(ctrl)
 	spanner.EXPECT().GetCurrentValidatorsByHash(gomock.Any(), gomock.Any(), gomock.Any()).Return([]*valset.Validator{
 		{
 			ID:               0,
@@ -947,7 +947,7 @@ func BenchmarkZenaMining(b *testing.B) {
 	irisClientMock := mocks.NewMockIIrisClient(ctrl)
 	irisClientMock.EXPECT().Close().Times(1)
 
-	contractMock := iris.NewMockGenesisContract(ctrl)
+	contractMock := zena.NewMockGenesisContract(ctrl)
 
 	db, _, _ := NewDBForFakes(b)
 
@@ -1031,7 +1031,7 @@ func BenchmarkZenaMiningBlockSTMMetadata(b *testing.B) {
 	ethAPIMock := api.NewMockCaller(ctrl)
 	ethAPIMock.EXPECT().Call(gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any()).AnyTimes()
 
-	spanner := iris.NewMockSpanner(ctrl)
+	spanner := zena.NewMockSpanner(ctrl)
 	spanner.EXPECT().GetCurrentValidatorsByHash(gomock.Any(), gomock.Any(), gomock.Any()).Return([]*valset.Validator{
 		{
 			ID:               0,
@@ -1044,7 +1044,7 @@ func BenchmarkZenaMiningBlockSTMMetadata(b *testing.B) {
 	irisClientMock := mocks.NewMockIIrisClient(ctrl)
 	irisClientMock.EXPECT().Close().Times(1)
 
-	contractMock := iris.NewMockGenesisContract(ctrl)
+	contractMock := zena.NewMockGenesisContract(ctrl)
 
 	db, _, _ := NewDBForFakes(b)
 

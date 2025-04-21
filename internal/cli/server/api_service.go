@@ -9,37 +9,37 @@ import (
 	"github.com/zenanetwork/go-zenanet/core/types"
 	"github.com/zenanetwork/go-zenanet/rpc"
 
-	protobor "github.com/maticnetwork/polyproto/bor"
-	protoutil "github.com/maticnetwork/polyproto/utils"
+	protoutil "github.com/zenanetwork/zenaproto/utils"
+	protozena "github.com/zenanetwork/zenaproto/zena"
 )
 
-func (s *Server) GetRootHash(ctx context.Context, req *protobor.GetRootHashRequest) (*protobor.GetRootHashResponse, error) {
+func (s *Server) GetRootHash(ctx context.Context, req *protozena.GetRootHashRequest) (*protozena.GetRootHashResponse, error) {
 	rootHash, err := s.backend.APIBackend.GetRootHash(ctx, req.StartBlockNumber, req.EndBlockNumber)
 	if err != nil {
 		return nil, err
 	}
 
-	return &protobor.GetRootHashResponse{RootHash: rootHash}, nil
+	return &protozena.GetRootHashResponse{RootHash: rootHash}, nil
 }
 
-func (s *Server) GetVoteOnHash(ctx context.Context, req *protobor.GetVoteOnHashRequest) (*protobor.GetVoteOnHashResponse, error) {
+func (s *Server) GetVoteOnHash(ctx context.Context, req *protozena.GetVoteOnHashRequest) (*protozena.GetVoteOnHashResponse, error) {
 	vote, err := s.backend.APIBackend.GetVoteOnHash(ctx, req.StartBlockNumber, req.EndBlockNumber, req.Hash, req.MilestoneId)
 	if err != nil {
 		return nil, err
 	}
 
-	return &protobor.GetVoteOnHashResponse{Response: vote}, nil
+	return &protozena.GetVoteOnHashResponse{Response: vote}, nil
 }
 
-func headerToProtoborHeader(h *types.Header) *protobor.Header {
-	return &protobor.Header{
+func headerToProtozenaHeader(h *types.Header) *protozena.Header {
+	return &protozena.Header{
 		Number:     h.Number.Uint64(),
 		ParentHash: protoutil.ConvertHashToH256(h.ParentHash),
 		Time:       h.Time,
 	}
 }
 
-func (s *Server) HeaderByNumber(ctx context.Context, req *protobor.GetHeaderByNumberRequest) (*protobor.GetHeaderByNumberResponse, error) {
+func (s *Server) HeaderByNumber(ctx context.Context, req *protozena.GetHeaderByNumberRequest) (*protozena.GetHeaderByNumberResponse, error) {
 	bN, err := getRpcBlockNumberFromString(req.Number)
 	if err != nil {
 		return nil, err
@@ -53,10 +53,10 @@ func (s *Server) HeaderByNumber(ctx context.Context, req *protobor.GetHeaderByNu
 		return nil, errors.New("header not found")
 	}
 
-	return &protobor.GetHeaderByNumberResponse{Header: headerToProtoborHeader(header)}, nil
+	return &protozena.GetHeaderByNumberResponse{Header: headerToProtozenaHeader(header)}, nil
 }
 
-func (s *Server) BlockByNumber(ctx context.Context, req *protobor.GetBlockByNumberRequest) (*protobor.GetBlockByNumberResponse, error) {
+func (s *Server) BlockByNumber(ctx context.Context, req *protozena.GetBlockByNumberRequest) (*protozena.GetBlockByNumberResponse, error) {
 	bN, err := getRpcBlockNumberFromString(req.Number)
 	if err != nil {
 		return nil, err
@@ -70,16 +70,16 @@ func (s *Server) BlockByNumber(ctx context.Context, req *protobor.GetBlockByNumb
 		return nil, errors.New("block not found")
 	}
 
-	return &protobor.GetBlockByNumberResponse{Block: blockToProtoBlock(block)}, nil
+	return &protozena.GetBlockByNumberResponse{Block: blockToProtoBlock(block)}, nil
 }
 
-func blockToProtoBlock(h *types.Block) *protobor.Block {
-	return &protobor.Block{
-		Header: headerToProtoborHeader(h.Header()),
+func blockToProtoBlock(h *types.Block) *protozena.Block {
+	return &protozena.Block{
+		Header: headerToProtozenaHeader(h.Header()),
 	}
 }
 
-func (s *Server) TransactionReceipt(ctx context.Context, req *protobor.ReceiptRequest) (*protobor.ReceiptResponse, error) {
+func (s *Server) TransactionReceipt(ctx context.Context, req *protozena.ReceiptRequest) (*protozena.ReceiptResponse, error) {
 	_, _, blockHash, _, txnIndex, err := s.backend.APIBackend.GetTransaction(ctx, protoutil.ConvertH256ToHash(req.Hash))
 	if err != nil {
 		return nil, err
@@ -98,16 +98,16 @@ func (s *Server) TransactionReceipt(ctx context.Context, req *protobor.ReceiptRe
 		return nil, errors.New("transaction index out of bounds")
 	}
 
-	return &protobor.ReceiptResponse{Receipt: ConvertReceiptToProtoReceipt(receipts[txnIndex])}, nil
+	return &protozena.ReceiptResponse{Receipt: ConvertReceiptToProtoReceipt(receipts[txnIndex])}, nil
 }
 
-func (s *Server) BorBlockReceipt(ctx context.Context, req *protobor.ReceiptRequest) (*protobor.ReceiptResponse, error) {
-	receipt, err := s.backend.APIBackend.GetBorBlockReceipt(ctx, protoutil.ConvertH256ToHash(req.Hash))
+func (s *Server) BorBlockReceipt(ctx context.Context, req *protozena.ReceiptRequest) (*protozena.ReceiptResponse, error) {
+	receipt, err := s.backend.APIBackend.GetZenaBlockReceipt(ctx, protoutil.ConvertH256ToHash(req.Hash))
 	if err != nil {
 		return nil, err
 	}
 
-	return &protobor.ReceiptResponse{Receipt: ConvertReceiptToProtoReceipt(receipt)}, nil
+	return &protozena.ReceiptResponse{Receipt: ConvertReceiptToProtoReceipt(receipt)}, nil
 }
 
 func getRpcBlockNumberFromString(blockNumber string) (rpc.BlockNumber, error) {

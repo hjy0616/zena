@@ -9,11 +9,11 @@ import (
 	"github.com/stretchr/testify/require"
 
 	"github.com/zenanetwork/go-zenanet/common"
-	"github.com/zenanetwork/go-zenanet/consensus/iris"
-	"github.com/zenanetwork/go-zenanet/consensus/iris/clerk"
-	"github.com/zenanetwork/go-zenanet/consensus/iris/irisd/checkpoint"
-	"github.com/zenanetwork/go-zenanet/consensus/iris/irisd/milestone"
-	"github.com/zenanetwork/go-zenanet/consensus/iris/irisd/span"
+	"github.com/zenanetwork/go-zenanet/consensus/zena"
+	"github.com/zenanetwork/go-zenanet/consensus/zena/clerk"
+	"github.com/zenanetwork/go-zenanet/consensus/zena/iris/checkpoint"
+	"github.com/zenanetwork/go-zenanet/consensus/zena/iris/milestone"
+	"github.com/zenanetwork/go-zenanet/consensus/zena/iris/span"
 )
 
 type mockIris struct {
@@ -74,7 +74,7 @@ func TestFetchWhitelistCheckpointAndMilestone(t *testing.T) {
 	// Create a mock iris instance and use it for creating a zena instance
 	var iris mockIris
 
-	zena := &iris.Zena{IrisClient: &iris}
+	zena := &zena.Zena{IrisClient: &iris}
 
 	fetchCheckpointTest(t, &iris, zena, handler, verifier)
 	fetchMilestoneTest(t, &iris, zena, handler, verifier)
@@ -84,7 +84,7 @@ func (b *zenaVerifier) setVerify(verifyFn func(ctx context.Context, eth *Zenanet
 	b.verify = verifyFn
 }
 
-func fetchCheckpointTest(t *testing.T, iris *mockIris, zena *iris.Zena, handler *ethHandler, verifier *zenaVerifier) {
+func fetchCheckpointTest(t *testing.T, iris *mockIris, zena *zena.Zena, handler *ethHandler, verifier *zenaVerifier) {
 	t.Helper()
 
 	var checkpoints []*checkpoint.Checkpoint
@@ -116,7 +116,7 @@ func fetchCheckpointTest(t *testing.T, iris *mockIris, zena *iris.Zena, handler 
 	require.Equal(t, checkpoints[len(checkpoints)-1].RootHash, blockHash)
 }
 
-func fetchMilestoneTest(t *testing.T, iris *mockIris, zena *iris.Zena, handler *ethHandler, verifier *zenaVerifier) {
+func fetchMilestoneTest(t *testing.T, iris *mockIris, zena *zena.Zena, handler *ethHandler, verifier *zenaVerifier) {
 	t.Helper()
 
 	var milestones []*milestone.Milestone

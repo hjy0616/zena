@@ -7,7 +7,8 @@ import (
 	"strings"
 
 	"github.com/zenanetwork/go-zenanet/common"
-	"github.com/zenanetwork/go-zenanet/consensus/iris"
+	"github.com/zenanetwork/go-zenanet/consensus/zena"
+	"github.com/zenanetwork/go-zenanet/consensus/zena/iris"
 	"github.com/zenanetwork/go-zenanet/log"
 )
 
@@ -23,7 +24,7 @@ var (
 
 // fetchWhitelistCheckpoint fetches the latest checkpoint from it's local iris
 // and verifies the data against zena data.
-func (h *ethHandler) fetchWhitelistCheckpoint(ctx context.Context, zena *iris.Zena, eth *Zenanet, verifier *zenaVerifier) (uint64, common.Hash, error) {
+func (h *ethHandler) fetchWhitelistCheckpoint(ctx context.Context, zena *zena.Zena, eth *Zenanet, verifier *zenaVerifier) (uint64, common.Hash, error) {
 	var (
 		blockNum  uint64
 		blockHash common.Hash
@@ -59,7 +60,7 @@ func (h *ethHandler) fetchWhitelistCheckpoint(ctx context.Context, zena *iris.Ze
 
 // fetchWhitelistMilestone fetches the latest milestone from it's local iris
 // and verifies the data against zena data.
-func (h *ethHandler) fetchWhitelistMilestone(ctx context.Context, zena *iris.Zena, eth *Zenanet, verifier *zenaVerifier) (uint64, common.Hash, error) {
+func (h *ethHandler) fetchWhitelistMilestone(ctx context.Context, zena *zena.Zena, eth *Zenanet, verifier *zenaVerifier) (uint64, common.Hash, error) {
 	var (
 		num  uint64
 		hash common.Hash
@@ -92,14 +93,14 @@ func (h *ethHandler) fetchWhitelistMilestone(ctx context.Context, zena *iris.Zen
 	return num, hash, err
 }
 
-func (h *ethHandler) fetchNoAckMilestone(ctx context.Context, zena *iris.Zena) (string, error) {
+func (h *ethHandler) fetchNoAckMilestone(ctx context.Context, zena *zena.Zena) (string, error) {
 	milestoneID, err := zena.IrisClient.FetchLastNoAckMilestone(ctx)
 	err = reportCommonErrors("latest no-ack milestone", err, nil)
 
 	return milestoneID, err
 }
 
-func (h *ethHandler) fetchNoAckMilestoneByID(ctx context.Context, zena *iris.Zena, milestoneID string) error {
+func (h *ethHandler) fetchNoAckMilestoneByID(ctx context.Context, zena *zena.Zena, milestoneID string) error {
 	err := zena.IrisClient.FetchNoAckMilestone(ctx, milestoneID)
 	if errors.Is(err, iris.ErrNotInRejectedList) {
 		log.Debug("MilestoneID not in rejected list", "milestoneID", milestoneID)

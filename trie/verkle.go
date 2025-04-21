@@ -21,8 +21,8 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/holiman/uint256"
 	"github.com/ethereum/go-verkle"
+	"github.com/holiman/uint256"
 	"github.com/zenanetwork/go-zenanet/common"
 	"github.com/zenanetwork/go-zenanet/core/types"
 	"github.com/zenanetwork/go-zenanet/ethdb"
